@@ -1,0 +1,39 @@
+# Variáveis e credenciais
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# VS Code
+.vscode/
+
+# Spark
+logs/
+metastore_db/
+derby.log
+spark-warehouse/
+
+# Dados locais
+data/raw/*
+data/bronze/*
+data/silver/*
+data/gold/*
+data/temp/*
+
+# Manter as pastas no Git
+!data/raw/.gitkeep
+!data/bronze/.gitkeep
+!data/silver/.gitkeep
+!data/gold/.gitkeep
+!data/temp/.gitkeep
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs gerais
+*.log
