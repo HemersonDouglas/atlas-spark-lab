@@ -1,0 +1,79 @@
+services:
+
+  spark-master:
+    image: spark:3.5.8
+
+    container_name: atlas-spark-master
+
+    command:
+      - /opt/spark/bin/spark-class
+      - org.apache.spark.deploy.master.Master
+
+    environment:
+      SPARK_MASTER_HOST: spark-master
+      SPARK_MASTER_PORT: 7077
+      SPARK_MASTER_WEBUI_PORT: 8080
+
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+
+    restart: unless-stopped
+
+    networks:
+      - atlas-network
+
+  spark-worker:
+    image: spark:3.5.8
+
+    container_name: atlas-spark-worker
+
+    command:
+      - /opt/spark/bin/spark-class
+      - org.apache.spark.deploy.worker.Worker
+      - spark://spark-master:7077
+
+    environment:
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 2g
+      SPARK_WORKER_WEBUI_PORT: 8081
+
+    ports:
+      - "8081:8081"
+
+    depends_on:
+      - spark-master
+
+    restart: unless-stopped
+
+    networks:
+      - atlas-network
+
+  postgres:
+    image: postgres:16
+
+    container_name: atlas-spark-postgres
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./sql/ddl:/docker-entrypoint-initdb.d
+
+    restart: unless-stopped
+
+    networks:
+      - atlas-network
+
+networks:
+  atlas-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
