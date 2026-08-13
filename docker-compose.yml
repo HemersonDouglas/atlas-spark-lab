@@ -34,6 +34,10 @@ services:
       - org.apache.spark.deploy.master.Master
 
     environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
       SPARK_MASTER_HOST: spark-master
       SPARK_MASTER_PORT: 7077
       SPARK_MASTER_WEBUI_PORT: 8080
@@ -68,6 +72,10 @@ services:
       - spark://spark-master:7077
 
     environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 2g
       SPARK_WORKER_WEBUI_PORT: 8081
